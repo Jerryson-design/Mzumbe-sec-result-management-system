@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>School MIS PRO</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#eef2f7;
+}
+
+/* LOGIN */
+#loginPage{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#0b2c4d;
+}
+
+.loginBox{
+background:white;
+padding:20px;
+width:300px;
+border-radius:10px;
+text-align:center;
+}
+
+/* SIDEBAR */
+.sidebar{
+position:fixed;
+left:-220px;
+top:0;
+width:200px;
+height:100%;
+background:#0b2c4d;
+color:white;
+padding:15px;
+transition:0.3s;
+}
+
+.sidebar.active{
+left:0;
+}
+
+.sidebar a{
+display:block;
+color:white;
+padding:10px;
+text-decoration:none;
+border-bottom:1px solid rgba(255,255,255,0.2);
+}
+
+.sidebar a:hover{
+background:#163d66;
+}
+
+/* MAIN */
+.main{
+margin-left:20px;
+padding:20px;
+}
+
+/* TOPBAR */
+.topbar{
+background:#0b2c4d;
+color:white;
+padding:10px;
+display:flex;
+align-items:center;
+}
+
+.menuBtn{
+cursor:pointer;
+font-size:20px;
+margin-right:10px;
+}
+
+/* CARDS */
+.card{
+background:white;
+padding:15px;
+border-radius:10px;
+margin-top:15px;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+}
+
+/* INPUT */
+input,select,button{
+width:100%;
+padding:8px;
+margin-top:5px;
+}
+
+/* TABLE */
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th{
+background:#0b2c4d;
+color:white;
+padding:8px;
+}
+
+td{
+border:1px solid #ddd;
+padding:6px;
+text-align:center;
+}
+
+/* STATS */
+.stats{
+display:flex;
+gap:10px;
+margin-top:10px;
+}
+
+.stat{
+flex:1;
+background:white;
+padding:10px;
+border-radius:10px;
+text-align:center;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage">
+<div class="loginBox">
+<h2>Login</h2>
+<input id="u" placeholder="Username">
+<input id="p" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+</div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none;">
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+<h3>MENU</h3>
+
+<a href="#" onclick="show('dashboard')">Dashboard</a>
+
+<h4>📚 Vidato</h4>
+<a href="#" onclick="openForm('Form 1')">Form 1</a>
+<a href="#" onclick="openForm('Form 2')">Form 2</a>
+<a href="#" onclick="openForm('Form 3')">Form 3</a>
+<a href="#" onclick="openForm('Form 4')">Form 4</a>
+
+<a href="#" onclick="logout()">Logout</a>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+<span class="menuBtn" onclick="toggleMenu()">☰</span>
+<h3>School MIS System</h3>
+</div>
+
+<div class="main">
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+<div class="card">
+<h2>Welcome to MIS System</h2>
+</div>
+</div>
+
+<!-- RESULTS -->
+<div id="results" style="display:none;">
+
+<div class="card">
+<h3 id="formTitle">Results</h3>
+
+<div class="grid">
+<input id="name" placeholder="Student Name">
+<select id="form">
+<option>Form 1</option>
+<option>Form 2</option>
+<option>Form 3</option>
+<option>Form 4</option>
+</select>
+</div>
+
+<div class="grid">
+<input id="m1" placeholder="Math">
+<input id="m2" placeholder="English">
+<input id="m3" placeholder="Kiswahili">
+<input id="m4" placeholder="Biology">
+<input id="m5" placeholder="Physics">
+<input id="m6" placeholder="Chemistry">
+<input id="m7" placeholder="History">
+</div>
+
+<button onclick="save()">Save Result</button>
+</div>
+
+<div class="card">
+<table id="tbl">
+<tr>
+<th>Pos</th>
+<th>Name</th>
+<th>Form</th>
+<th>Total</th>
+<th>Avg</th>
+<th>Grade</th>
+</tr>
+</table>
+
+<div id="stats"></div>
+</div>
+
+<!-- COMMENTS WILL APPEAR HERE ONLY -->
+<div id="commentSection"></div>
+
+</div>
+
+</div>
+
+<script>
+
+let currentForm = "Form 1";
+
+/* LOGIN */
+function login(){
+let u=document.getElementById("u").value.trim();
+let p=document.getElementById("p").value.trim();
+
+if(u==="admin" && p==="1234"){
+document.getElementById("loginPage").style.display="none";
+document.getElementById("app").style.display="block";
+load();
+}else{
+alert("Wrong login");
+}
+}
+
+/* MENU */
+function toggleMenu(){
+document.getElementById("sidebar").classList.toggle("active");
+}
+
+/* NAV */
+function show(page){
+document.getElementById("dashboard").style.display="none";
+document.getElementById("results").style.display="none";
+document.getElementById(page).style.display="block";
+toggleMenu();
+}
+
+/* OPEN FORM */
+function openForm(form){
+currentForm = form;
+show('results');
+load();
+document.getElementById("sidebar").classList.remove("active");
+}
+
+/* GRADE */
+function grade(a){
+if(a>=80) return "A";
+if(a>=60) return "B";
+if(a>=40) return "C";
+return "F";
+}
+
+/* COMMENTS */
+function classMasterComment(avg){
+if(avg>=70) return "Excellent performance. Keep it up.";
+if(avg>=50) return "Good effort, but improvement needed.";
+return "Serious academic intervention required.";
+}
+
+function headmasterComment(avg){
+if(avg>=70) return "School performance is strong.";
+if(avg>=50) return "Average performance, more effort needed.";
+return "Urgent improvement required.";
+}
+
+/* SAVE */
+function save(){
+
+let data=JSON.parse(localStorage.getItem("r")||"[]");
+
+let studentName=document.getElementById("name").value.trim();
+let formValue=document.getElementById("form").value;
+
+if(!studentName){
+alert("Enter student name");
+return;
+}
+
+let marks=[
+Number(document.getElementById("m1").value),
+Number(document.getElementById("m2").value),
+Number(document.getElementById("m3").value),
+Number(document.getElementById("m4").value),
+Number(document.getElementById("m5").value),
+Number(document.getElementById("m6").value),
+Number(document.getElementById("m7").value)
+];
+
+let total=marks.reduce((a,b)=>a+b,0);
+let avg=total/7;
+
+data.push({
+name:studentName,
+form:formValue,
+total,
+avg,
+grade:grade(avg)
+});
+
+localStorage.setItem("r",JSON.stringify(data));
+
+load();
+clearForm();
+}
+
+/* LOAD */
+function load(){
+
+let data=JSON.parse(localStorage.getItem("r")||"[]");
+
+data=data.filter(d=>d.form===currentForm);
+data.sort((a,b)=>b.avg-a.avg);
+
+document.getElementById("formTitle").innerText=currentForm+" Results";
+
+let t=document.getElementById("tbl");
+
+t.innerHTML=`
+<tr>
+<th>Pos</th>
+<th>Name</th>
+<th>Form</th>
+<th>Total</th>
+<th>Avg</th>
+<th>Grade</th>
+</tr>
+`;
+
+let pass=0,fail=0,sum=0;
+
+data.forEach((d,i)=>{
+sum+=d.avg;
+if(d.avg>=40) pass++; else fail++;
+
+t.innerHTML+=`
+<tr>
+<td>${i+1}</td>
+<td>${d.name}</td>
+<td>${d.form}</td>
+<td>${d.total}</td>
+<td>${d.avg.toFixed(2)}</td>
+<td>${d.grade}</td>
+</tr>
+`;
+});
+
+let classAvg=data.length?sum/data.length:0;
+
+/* STATS */
+document.getElementById("stats").innerHTML=`
+<div class="stats">
+<div class="stat"><h3>${classAvg.toFixed(1)}</h3><p>Class Avg</p></div>
+<div class="stat"><h3>${pass}</h3><p>Pass</p></div>
+<div class="stat"><h3>${fail}</h3><p>Fail</p></div>
+</div>
+`;
+
+/* COMMENTS SECTION (ONLY HERE) */
+let commentBox=document.getElementById("commentSection");
+
+commentBox.innerHTML=`
+<div class="card">
+<h3>📌 Academic Comments</h3>
+
+<p><b>👩‍🏫 Class Master:</b><br>
+${classMasterComment(classAvg)}</p>
+
+<p><b>🏫 Headmaster:</b><br>
+${headmasterComment(classAvg)}</p>
+</div>
+`;
+}
+
+/* CLEAR */
+function clearForm(){
+document.getElementById("name").value="";
+document.getElementById("m1").value="";
+document.getElementById("m2").value="";
+document.getElementById("m3").value="";
+document.getElementById("m4").value="";
+document.getElementById("m5").value="";
+document.getElementById("m6").value="";
+document.getElementById("m7").value="";
+}
+
+/* LOGOUT */
+function logout(){
+location.reload();
+}
+
+</script>
+
+</body>
+</html>
