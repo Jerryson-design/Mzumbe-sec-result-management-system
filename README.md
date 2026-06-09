@@ -1,3 +1,6 @@
+##About me
+My name is Silas M. Jerryson with registration number 14325108/T.23
+I am a bachelor of scince with education mathematics and ICT (Bsc.MICT- EDU) second year student at mzunbe university
 # 🏫 School Management Information System (MIS)
 
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
@@ -10,8 +13,9 @@
 The **School Management Information System (MIS)** is a web-based system built using HTML, CSS, and JavaScript.  
 It is designed to manage basic school operations such as student records, attendance, and results.
 
-This system runs **offline** using browser local storage (no database required).
 
+## Live Website
+https://jerryson-design.github.io/Mzumbe-sec-result-management-system/
 ---
 
 ## 🚀 Features
@@ -42,7 +46,7 @@ IS_System │ ├── index.html        # Login page ├── register.html  
 
 ## 💾 Data Storage
 - Uses browser **localStorage**
-- No backend or database required
+
 
 ---
 
